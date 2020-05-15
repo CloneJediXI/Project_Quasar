@@ -22,10 +22,10 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
-        
+        paused = false;
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //***Checking if The keyboard or controller is being used****
         for (int i = 0; i < 20; i++)
@@ -55,15 +55,15 @@ public class PlayerMovement : MonoBehaviour
         {
             if (controllerInput)
             {
-                Look(Input.GetAxis("RightStick X"), Input.GetAxis("RightStick Y"));
-                Move(Input.GetAxis("HorizontalJoy"), Input.GetAxis("VerticalJoy"));
                 
+                Move(Input.GetAxis("HorizontalJoy"), Input.GetAxis("VerticalJoy"));
+                Look(Input.GetAxis("RightStick X"), Input.GetAxis("RightStick Y"));
             }
             else
             {
-                Look();
-                Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
                 
+                Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+                Look();
             }
             
             //Steady your self
@@ -109,19 +109,16 @@ public class PlayerMovement : MonoBehaviour
     void Look()
     {
         mouse_pos = Input.mousePosition;
-        /*debugString += "Mouse_X : " + mouse_pos.x + "\n";
-        debugString += "Mouse_Y : " + mouse_pos.y + "\n";
-        debugString += "Mouse_Z : " + mouse_pos.z + "\n";*/
 
         mouse_pos.z = 1f; //Must pe positive to be converted by Screen to World Point
         mouse_world = Camera.main.ScreenToWorldPoint(mouse_pos);
-        /*debugString += "World_Mouse_X : " + mouse_world.x + "\n";
+        debugString += "World_Mouse_X : " + mouse_world.x + "\n";
         debugString += "World_Mouse_Y : " + mouse_world.y + "\n";
-        debugString += "World_Mouse_Z : " + mouse_world.z + "\n";*/
-        Vector3 diff = transform.position - mouse_world;
+        debugString += "World_Mouse_Z : " + mouse_world.z + "\n";
+
+        lookAtTarget.position = new Vector3(mouse_world.x, 1f, mouse_world.y);
         
-        Look(diff.x, diff.z);
-        /*transform.LookAt(lookAtTarget);
-        transform.Rotate(new Vector3(0f, 90f, 90f));*/
+        transform.LookAt(mouse_world);
+        transform.Rotate(new Vector3(0f, 90f, 90f));
     }
 }
