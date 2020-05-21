@@ -13,9 +13,11 @@ public class PlayerMovement : MonoBehaviour
     private string debugString;
 
     public bool controllerInput;
-    private Vector3 mouse_pos;
+    public Vector3 mouse_pos;
     private Vector3 mouse_world;
-    private float angle;
+    public float angle;
+    public float horizontal;
+    public float vertical;
 
     public Transform lookAtTarget;
     // Start is called before the first frame update
@@ -71,10 +73,7 @@ public class PlayerMovement : MonoBehaviour
         }
         joystickInfo.text = debugString;
     }
-    void LateFixedUpdate()
-    {
 
-    }
     void Move(float inputX, float inputY)
     {
         debugString += "L_Joy_X : " + inputX+"\n";
@@ -111,14 +110,24 @@ public class PlayerMovement : MonoBehaviour
         mouse_pos = Input.mousePosition;
 
         mouse_pos.z = 1f; //Must pe positive to be converted by Screen to World Point
-        mouse_world = Camera.main.ScreenToWorldPoint(mouse_pos);
-        debugString += "World_Mouse_X : " + mouse_world.x + "\n";
-        debugString += "World_Mouse_Y : " + mouse_world.y + "\n";
-        debugString += "World_Mouse_Z : " + mouse_world.z + "\n";
+        //This assumes the player is always in the middle of the screen
 
-        lookAtTarget.position = new Vector3(mouse_world.x, 1f, mouse_world.y);
+        //Step 1: Find the mouse position relative to the player (Middle of the screen)
+        horizontal = mouse_pos.x - (Screen.width / 2f);
+        vertical = mouse_pos.y - (Screen.height / 2f);
         
-        transform.LookAt(mouse_world);
-        transform.Rotate(new Vector3(0f, 90f, 90f));
+        //Step 2: Find the angle from the center of the screen to the mouse
+        angle = Mathf.Rad2Deg * Mathf.Atan(vertical / horizontal);
+
+        //Step 3: Rotate the unit circle so 0 is vertical, account for ArcTan's blind spot
+        angle = (-angle + 90);
+        if (horizontal < 0)
+        {
+            angle += 180;
+        }
+
+        //Step 4: Rotate Player 
+        gameObject.transform.eulerAngles = new Vector3(0f, angle, 0f);
+
     }
 }

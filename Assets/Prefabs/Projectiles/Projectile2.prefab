@@ -127,6 +127,10 @@ MonoBehaviour:
     type: 3}
   collideParticles: {fileID: 2570910506540059516, guid: 6b8049dd859023f40a8bcb98a4d92a5b,
     type: 3}
+  sparkHit: {fileID: 8300000, guid: d8075a69b46ab18448b3225fd3b5ca33, type: 3}
+  audioSource: {fileID: 0}
+  soundPrefab: {fileID: 3185060540871486894, guid: b6131b0192d59394693e7db87e2a33ea,
+    type: 3}
 --- !u!1 &8905697682958231484
 GameObject:
   m_ObjectHideFlags: 0

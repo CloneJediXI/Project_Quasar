@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerLook : MonoBehaviour
 {
     private PlayerMovement pm;
+    private Vector3 mouse_pos;
+    private Vector3 mouse_world;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,20 +46,12 @@ public class PlayerLook : MonoBehaviour
     }
     void Look()
     {
-        Vector3 mouse_pos = Input.mousePosition;
-        /*debugString += "Mouse_X : " + mouse_pos.x + "\n";
-        debugString += "Mouse_Y : " + mouse_pos.y + "\n";
-        debugString += "Mouse_Z : " + mouse_pos.z + "\n";*/
+        mouse_pos = Input.mousePosition;
 
         mouse_pos.z = 1f; //Must pe positive to be converted by Screen to World Point
-        Vector3 mouse_world = Camera.main.ScreenToWorldPoint(mouse_pos);
-        /*debugString += "World_Mouse_X : " + mouse_world.x + "\n";
-        debugString += "World_Mouse_Y : " + mouse_world.y + "\n";
-        debugString += "World_Mouse_Z : " + mouse_world.z + "\n";*/
-        Vector3 diff = transform.position - mouse_world;
+        mouse_world = Camera.main.ScreenToWorldPoint(mouse_pos);
 
-        Look(diff.x, diff.z);
-        /*transform.LookAt(lookAtTarget);
-        transform.Rotate(new Vector3(0f, 90f, 90f));*/
+        transform.LookAt(mouse_world);
+        transform.Rotate(new Vector3(0f, 90f, 90f));
     }
 }

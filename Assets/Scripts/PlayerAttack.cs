@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class PlayerAttack : MonoBehaviour
     private bool triggerDown;
     public float fireRate;
     private float timer;
+    public Image bulletCover;
+    private Vector2 coverSize;
+    private Vector2 coverStartSize;
 
     private Vector3 localForward;
     // Start is called before the first frame update
@@ -19,6 +23,12 @@ public class PlayerAttack : MonoBehaviour
     {
         bulletSpawn = gameObject.transform.GetChild(0).GetChild(0);
         localForward = transform.worldToLocalMatrix.MultiplyVector(transform.forward);
+        
+        
+        coverStartSize = bulletCover.rectTransform.sizeDelta;
+        coverSize = coverStartSize;
+        coverSize.y = 0f;
+        bulletCover.rectTransform.sizeDelta = coverSize;
     }
 
     // Update is called once per frame
@@ -27,6 +37,9 @@ public class PlayerAttack : MonoBehaviour
         if(timer < fireRate)
         {
             timer += Time.deltaTime;
+            coverSize.y = coverStartSize.y - (coverStartSize.y * (timer/fireRate));
+            bulletCover.rectTransform.sizeDelta = coverSize;
+            
         }
         if ((Input.GetButtonDown("Fire1") || Input.GetAxis("Fire1") >.5f)&& timer > fireRate && !triggerDown)
         {
@@ -36,6 +49,8 @@ public class PlayerAttack : MonoBehaviour
             firredBullet.GetComponent<Rigidbody>().velocity = firredBullet.transform.up * bulletSpeed;
             audioSource.PlayOneShot(shotAudioClip);
             triggerDown = true;
+            coverSize.y = coverStartSize.y;
+            bulletCover.rectTransform.sizeDelta = coverSize;
             timer = 0f;
         }
         if(Input.GetAxis("Fire1") < .5f)
