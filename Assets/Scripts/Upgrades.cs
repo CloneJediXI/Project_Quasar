@@ -66,6 +66,10 @@ public class Upgrades : MonoBehaviour
             cannonMid.SetActive(true);
             upgrades.GetChild(1).gameObject.GetComponent<Button>().interactable = false;
         }
+        else if(!upgradeList[0])
+        {
+            upgrades.GetChild(1).gameObject.GetComponent<Button>().interactable = false;
+        }
         if (upgradeList[2])
         {
             Engine.SetActive(true);
