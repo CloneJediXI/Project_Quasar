@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Upgrades : MonoBehaviour
@@ -77,8 +78,8 @@ public class Upgrades : MonoBehaviour
 
         }
     }
-}
-public enum Upgrade
-{
-    DoubleCannon, TrippleCannon, FasterEngines
+    public void Back()
+    {
+        SceneManager.LoadScene(2);
+    }
 }
