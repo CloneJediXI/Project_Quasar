@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
@@ -15,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
     private float vertical;
 
     private GameState gs;
+    public EventSystem ev;
+    public bool held = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +43,68 @@ public class PlayerMovement : MonoBehaviour
                 Look();
             }
         }
+        else
+        {
+            /*if (gs.ControllerInput)
+            {
+                Navigate(Input.GetAxis("HorizontalJoy"), Input.GetAxis("VerticalJoy"));
+            }*/
+        }
+    }
+    void Navigate(float inputX, float inputY)
+    {
+        AxisEventData data = new AxisEventData(EventSystem.current);
+
+        MoveDirection direction;
+
+        if (Mathf.Abs(inputX) > .25 || Mathf.Abs(inputY) > .25)
+        {
+            if (held == false)
+            {
+                if (Mathf.Abs(inputX) > Mathf.Abs(inputY))
+                {
+                    if (inputX > 0)
+                    {
+
+                        direction = MoveDirection.Right;
+                    }
+                    else
+                    {
+                        direction = MoveDirection.Left;
+                    }
+                }
+                else
+                {
+                    if (inputY > 0)
+                    {
+                        direction = MoveDirection.Up;
+                    }
+                    else
+                    {
+                        direction = MoveDirection.Down;
+                    }
+                }
+                held = true;
+
+
+                data.moveDir = direction;
+
+                data.selectedObject = EventSystem.current.currentSelectedGameObject;
+
+                ExecuteEvents.Execute(data.selectedObject, data, ExecuteEvents.moveHandler);
+            }
+        }
+        else
+        {
+            if (held)
+            {
+                held = false;
+            }
+            
+        }
+        
+
+        
     }
 
     void Move(float inputX, float inputY)

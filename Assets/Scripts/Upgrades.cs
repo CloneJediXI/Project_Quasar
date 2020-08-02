@@ -14,6 +14,10 @@ public class Upgrades : MonoBehaviour
     public GameObject cannonL;
     public GameObject Engine;
     public Transform upgrades;
+    [Header("Normal Color")]
+    public ColorBlock normalColor;
+    [Header("Disabled Color")]
+    public ColorBlock disabledColor;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,9 +43,13 @@ public class Upgrades : MonoBehaviour
     }
     public void Upgrade(int number)
     {
-        PlayerPrefs.SetString(UPGRADE + number, "true");
-        upgradeList[number] = true;
-        ShowUpgrades();
+        if (!upgradeList[number])
+        {
+            PlayerPrefs.SetString(UPGRADE + number, "true");
+            upgradeList[number] = true;
+            ShowUpgrades();
+        }
+        
         
     }
     void ShowUpgrades()
@@ -50,31 +58,31 @@ public class Upgrades : MonoBehaviour
         cannonR.SetActive(false);
         cannonMid.SetActive(true);
         Engine.SetActive(false);
-        upgrades.GetChild(0).gameObject.GetComponent<Button>().interactable = true;
-        upgrades.GetChild(1).gameObject.GetComponent<Button>().interactable = true;
-        upgrades.GetChild(2).gameObject.GetComponent<Button>().interactable = true;
+        upgrades.GetChild(0).gameObject.GetComponent<Button>().colors = normalColor;
+        upgrades.GetChild(1).gameObject.GetComponent<Button>().colors = normalColor;
+        upgrades.GetChild(2).gameObject.GetComponent<Button>().colors = normalColor;
         if (upgradeList[0])
         {
             cannonL.SetActive(true);
             cannonR.SetActive(true);
             cannonMid.SetActive(false);
-            upgrades.GetChild(0).gameObject.GetComponent<Button>().interactable = false;
+            upgrades.GetChild(0).gameObject.GetComponent<Button>().colors = disabledColor;
         }
         if (upgradeList[1])
         {
             cannonL.SetActive(true);
             cannonR.SetActive(true);
             cannonMid.SetActive(true);
-            upgrades.GetChild(1).gameObject.GetComponent<Button>().interactable = false;
+            upgrades.GetChild(1).gameObject.GetComponent<Button>().colors = disabledColor;
         }
         else if(!upgradeList[0])
         {
-            upgrades.GetChild(1).gameObject.GetComponent<Button>().interactable = false;
+            upgrades.GetChild(1).gameObject.GetComponent<Button>().colors = disabledColor;
         }
         if (upgradeList[2])
         {
             Engine.SetActive(true);
-            upgrades.GetChild(2).gameObject.GetComponent<Button>().interactable = false;
+            upgrades.GetChild(2).gameObject.GetComponent<Button>().colors = disabledColor;
 
         }
     }
