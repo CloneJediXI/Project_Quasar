@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class Upgrades : MonoBehaviour
 {
     private bool[] upgradeList;
+    public int[] upgradePrices;
+    public Text text;
     public static string UPGRADE = "upgrade_";
     private GameObject player;
     public GameObject cannonMid;
@@ -45,9 +47,21 @@ public class Upgrades : MonoBehaviour
     {
         if (!upgradeList[number])
         {
-            PlayerPrefs.SetString(UPGRADE + number, "true");
-            upgradeList[number] = true;
-            ShowUpgrades();
+            if (PlayerPrefs.HasKey("Money"))
+            {
+                int money = PlayerPrefs.GetInt("Money");
+                if (money >= upgradePrices[number])
+                {
+                    money -= upgradePrices[number];
+                    PlayerPrefs.SetInt("Money", money);
+                    text.text = money.ToString();
+
+                    PlayerPrefs.SetString(UPGRADE + number, "true");
+                    upgradeList[number] = true;
+                    ShowUpgrades();
+                }
+            }
+            
         }
         
         

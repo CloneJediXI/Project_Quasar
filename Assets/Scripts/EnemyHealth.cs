@@ -13,6 +13,7 @@ public class EnemyHealth : MonoBehaviour
     public GameObject explosionEffect;
     private Renderer rend;
     private Renderer rend2;
+    public GameObject moneyDrop;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +30,13 @@ public class EnemyHealth : MonoBehaviour
         {
             GameObject puf = Instantiate(explosionEffect);
             puf.transform.position = transform.position;
+            GameObject money = Instantiate(moneyDrop);
+            money.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+            int chance = Random.Range(0, 10);
+            if(chance > 7){
+                money = Instantiate(moneyDrop);
+                money.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+            }
             Destroy(gameObject);
         }
         if (timerGo)
